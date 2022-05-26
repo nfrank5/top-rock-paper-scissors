@@ -12,7 +12,7 @@ function computerPlay(){
 
 
 function playRound(playerSelection, computerSelection){
-
+    playerSelection = playerSelection.toLowerCase();
     switch(true){
         case(playerSelection==="rock"&&computerSelection==="paper"):
             return "You Lose! Paper beats rock"
@@ -43,7 +43,7 @@ function playRound(playerSelection, computerSelection){
     }
 }
 
-const playerSelection = computerPlay();
+const playerSelection = "rOcK"
 const computerSelection = computerPlay();
 
 
