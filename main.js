@@ -1,3 +1,16 @@
+let playerPoints = 0;
+let computerPoints = 0;
+let currentImage = null;
+const buttons = document.querySelectorAll("button");
+const message = document.querySelector(".message");
+const images = document.querySelectorAll("img");
+const computerScore = document.querySelector(".computer-score");
+const playerScore = document.querySelector(".player-score")
+
+buttons.forEach(button => button.addEventListener("click", playGame))
+images.forEach(image => image.addEventListener('transitionend', removeTransition))
+
+
 function computerPlay(){
     let number = Math.floor(Math.random()*3+1)
     switch(number){
@@ -10,78 +23,73 @@ function computerPlay(){
     }
 }
 
-function playRound(playerSelection, computerSelection){
-
+function round(playerSelection, computerSelection){
     switch(true){
         case(playerSelection==="rock"&&computerSelection==="paper"):
-            console.log("You Lose! Paper beats rock");
+            message.textContent = "You Lose! Paper beats rock";
             return -1
-        case(playerSelection==="rock"&&computerSelection==="rock"):
-        console.log("It's a tie");
-            return 0
         case(playerSelection==="rock"&&computerSelection==="scissors"):
-            console.log("You Won! Rock beats scissors");
+            message.textContent = "You Won! Rock beats scissors";
             return 1         
-        case(playerSelection==="paper"&&computerSelection==="paper"):
-            console.log("It's a tie");
-            return 0
         case(playerSelection==="paper"&&computerSelection==="rock"):
-            console.log("You Won! Paper beats rock");
+            message.textContent = "You Won! Paper beats rock";
             return 1
         case(playerSelection==="paper"&&computerSelection==="scissors"):
-            console.log("You Lose! Scissors beats paper");
+            message.textContent = "You Lose! Scissors beats paper";
             return -1
         case(playerSelection==="scissors"&&computerSelection==="paper"):
-            console.log("You Won! Scissors beats paper");
+            message.textContent = "You Won! Scissors beats paper";
             return 1             
         case(playerSelection==="scissors"&&computerSelection==="rock"):
-            console.log("You Lose! Rock beats scissors");
+            message.textContent = "You Lose! Rock beats scissors";
             return -1
-        case(playerSelection==="scissors"&&computerSelection==="scissors"):
-            console.log("It's a tie");
+        default:
+            message.textContent = "It's a tie";
             return 0
     }
 }
 
 function getWinner(playerScore, computerScore){
-    if(playerScore>computerScore){
-        console.log("You won the game!");
-    } else if(playerScore<computerScore){
-        console.log("The computer won the game!");
-    } else {
-        console.log("End of Game.\nIt's a tie!");
+    if(playerScore>=5){
+        message.textContent = "You won the game!";
+       
+    } else if(computerScore>=5){
+        message.textContent = "The computer won the game!";
     }
-
-
 }
 
-const OPTIONS = ["rock", "paper", "scissors"]
-
-function game(){
-    let playerPoints = 0;
-    let computerPoints = 0;
-    let playerPlay;
-    for (let i = 0; i < 5; i++){
-        
-        playerPlay = prompt("Choose Rock, Paper or Scissors");
-        while(!OPTIONS.includes(playerPlay.toLowerCase())){
-            playerPlay = prompt("Please check the spelling.\nChoose Rock, Paper or Scissors.");
-        }
-
-        switch(playRound(playerPlay , computerPlay())){
-            case(1):
-                playerPoints+=1
-                break;
-            case(-1):
-                computerPoints+=1
-                break;
-            case(0):
-                break;
-        }
-        console.log(`Current score: You:${playerPoints} Computer:${computerPoints}`)
-     }
-     console.log(`Final score: You:${playerPoints} Computer:${computerPoints}`);
-     getWinner(playerPoints, computerPoints);
+function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('playing');
 }
 
-game();
+function reload(){
+    window.location.reload();
+}
+
+function playGame(e){
+    currentImage = document.querySelector(`img[class~='${e.target.classList.value}']`)
+    currentImage.classList.add('playing');
+    let playerPlay = e.target.classList.value;
+    switch(round(playerPlay , computerPlay())){
+        case(1):
+            playerPoints+=1
+            break;
+        case(-1):
+            computerPoints+=1
+            break; 
+        case(0):
+            break;
+    }
+    computerScore.textContent = computerPoints;
+    playerScore.textContent = playerPoints;
+    getWinner(playerPoints,computerPoints)
+    if(computerPoints>=5||playerPoints>=5){
+        buttons.forEach(button => button.setAttribute("disabled",""));
+        const reloadButton = document.createElement("button");
+        message.appendChild(reloadButton);
+        reloadButton.textContent = "New Game?"
+        reloadButton.addEventListener("click", reload);
+    }
+    
+}

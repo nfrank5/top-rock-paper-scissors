@@ -1,0 +1,52 @@
+button {
+    margin:20px;
+    padding: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+
+}
+
+img {
+    width: 250px;
+    height: 200px;
+    border:1px ;
+    border-style: solid;
+    border-radius: 8px;
+    transition: all .07s ease;
+}
+
+.img-button {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+h1, .message, .score {
+    text-align: center;
+}
+
+.playing {
+    transform: scale(1.05);
+    border-color: gray;
+    box-shadow: 0 0 1rem gray;
+  }
+
+.points {
+    display: flex;
+    gap:35px;
+    justify-content: center;
+    margin: 15px;
+}
+
+.player-score, .computer-score {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    font-size: large;
+
+}
